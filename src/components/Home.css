@@ -1,0 +1,7 @@
+.half-hidden {
+  overflow: hidden;
+  max-height: 100px;
+  transition: 'max-height 0.3s ease';
+  margin: 16px;
+  
+}

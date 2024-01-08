@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Thread from './Threads';
+import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
 import { Typography } from '@mui/material';

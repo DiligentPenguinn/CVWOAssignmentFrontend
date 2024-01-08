@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import Home from './components/Home';
 import SingleThread from './components/SingleThread';
+import './index.css';
 
 const router = createBrowserRouter([
   {

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ThreadProps } from '../models/ThreadProps';
 import { Container } from '@mui/material';
-import Thread from './Threads';
-import { CssBaseline } from '@mui/material';
+import Thread from './Thread';
 import { Link } from 'react-router-dom';
 import CreateThread from './CreateThread';
+import { ThemeProvider } from '@emotion/react';
+import theme from '../models/Utils';
+import './Home.css';
 
 const Home: React.FC = () => {
   const [threads, SetThreads] = useState<ThreadProps[]>([]);
@@ -16,14 +18,14 @@ const Home: React.FC = () => {
         id: 1,
         title: 'React Thread 1',
         author: 'John Doe',
-        message: 'This is the first thread.',
+        message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum enim aspernatur at sunt eos iure et dolorem, numquam ducimus soluta veniam rerum possimus aliquam recusandae vel. Iusto accusantium laboriosam odit officiis rerum? Eaque, autem! Iusto quis debitis quos eos voluptatem iure aspernatur pariatur. Porro, quae numquam laboriosam quidem autem harum at libero nam dolorum distinctio laudantium quasi dolor incidunt similique maiores eveniet labore veritatis! Rem ullam tempore tempora! Vel doloribus alias nihil tempore quisquam? Quam fugit fuga amet suscipit sint, dolorum maiores, corrupti omnis a illum eveniet molestiae magnam ullam error nisi temporibus possimus laudantium. Reiciendis qui consequatur officia eius.',
         updatedAt: '2023-01-01 12:00 PM',
       },
       {
         id: 2,
         title: 'React Thread 2',
         author: 'Jane Smith',
-        message: 'This is the second thread.',
+        message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, labore, iure earum, ipsa veniam maiores dolore et quibusdam fuga quo tempora est aliquid nesciunt recusandae repudiandae quod culpa. Saepe nulla sapiente, voluptatem iusto ducimus ea fuga autem aut ab neque atque explicabo nam blanditiis alias nisi consequuntur optio maxime? Iure nam excepturi odio quidem nulla alias odit nihil repellat temporibus, aperiam voluptates iusto non incidunt aut velit? Minima suscipit molestiae non eius quo explicabo veritatis sit dicta! Error voluptate, amet accusamus esse debitis non laboriosam numquam commodi corporis suscipit vitae reiciendis corrupti omnis molestias libero? Ipsum, quos ullam asperiores magni illo amet deleniti, explicabo nemo similique harum, ut molestias repellendus doloremque repellat iusto tempore quae in accusamus soluta? Deleniti, dolor quia? Possimus eaque deserunt quaerat doloribus temporibus itaque beatae veniam, ullam magnam, laudantium ipsam officia praesentium necessitatibus nemo quos, autem nobis fugit adipisci reprehenderit minus! Repellendus necessitatibus sapiente, odio incidunt doloribus tempore pariatur esse minus voluptatibus eos accusantium, nobis explicabo cum illo quasi, voluptate omnis. Voluptatibus temporibus, esse repellat dicta alias error consectetur hic ullam officia quisquam neque. Numquam labore omnis, consequuntur architecto excepturi doloremque reiciendis animi rem autem harum minima nostrum, natus, dolorem suscipit modi placeat qui exercitationem tempora.',
         updatedAt: '2023-01-02 3:30 PM',
       },
       { 
@@ -89,26 +91,26 @@ const Home: React.FC = () => {
         message: 'This is the second thread.',
         updatedAt: '2023-01-02 3:30 PM',
       },
-      // Add more threads as needed
     ];
     SetThreads(threadData);
   }, [])
 
 
   return (
-    <div>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-        <CreateThread></CreateThread>
-          <div>
-            {threads.map((thread) => (
-              <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none' }}>
-                <Thread key={thread.id} {...thread} />
-              </Link>
-            ))}
-        </div>
-      </Container>
-    </div>
+    <>
+        <Container component="main" maxWidth="md">
+          <div style={{margin: 16}}>
+            <CreateThread/>
+          </div>
+            <div>
+              {threads.map((thread) => (
+                <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none' }}>
+                    <Thread key={thread.id} {...thread}/>
+                </Link>
+              ))}
+          </div>
+        </Container>
+    </>
   );
 };
 

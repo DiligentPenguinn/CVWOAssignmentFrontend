@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, Typography, Grid } from '@mui/material';
-import {ThreadProps} from '../models/ThreadProps'
+import { ThreadProps } from '../models/ThreadProps';
 
-const Thread: React.FC<ThreadProps> = ({id, title, author, message, updatedAt }) => {
+const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt }) => {
   return (
-    <Card variant="outlined" style={{ margin: '16px' }}>
+    <Card variant="outlined" style={{margin: 16}}>
       <CardContent>
         <Typography variant="h5" gutterBottom>
           {title}
@@ -19,10 +19,12 @@ const Thread: React.FC<ThreadProps> = ({id, title, author, message, updatedAt })
             <Typography variant="caption" color="textSecondary">
               Updated at: {updatedAt}
             </Typography>
-        </Grid>
+          </Grid>
         </Grid>
         <Typography variant="body1">
-          {message}
+          <div className='half-hidden'>
+            {message}
+          </div>
         </Typography>
 
       </CardContent>
