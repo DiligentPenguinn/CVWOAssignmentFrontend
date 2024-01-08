@@ -99,9 +99,7 @@ const Home: React.FC = () => {
   return (
     <>
         <Container component="main" maxWidth="md">
-          <div style={{margin: 16}}>
             <CreateThread/>
-          </div>
             <div>
               {threads.map((thread) => (
                 <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none' }}>
