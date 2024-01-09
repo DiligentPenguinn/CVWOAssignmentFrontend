@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+
 import { ThreadProps } from '../models/ThreadProps';
 import { Container } from '@mui/material';
 import Thread from './Thread';
 import { Link } from 'react-router-dom';
 import CreateThread from './CreateThread';
-import { ThemeProvider } from '@emotion/react';
-import theme from '../models/Utils';
-import './Home.css';
-
 const Home: React.FC = () => {
   const [threads, SetThreads] = useState<ThreadProps[]>([]);
 
@@ -99,14 +95,14 @@ const Home: React.FC = () => {
   return (
     <>
         <Container component="main" maxWidth="md">
-            <CreateThread/>
-            <div>
+            <div style={{margin: 16}}>
+              <CreateThread/>
+            </div>
               {threads.map((thread) => (
                 <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none' }}>
                     <Thread key={thread.id} {...thread}/>
                 </Link>
               ))}
-          </div>
         </Container>
     </>
   );

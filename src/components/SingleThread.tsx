@@ -4,6 +4,7 @@ import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
 import { Typography } from '@mui/material';
+import { CommentProps } from '../models/CommentProps';
 
 const SingleThread: React.FC = () => {
   const { threadId } = useParams<{ threadId: string }>();
@@ -12,7 +13,8 @@ const SingleThread: React.FC = () => {
     title: '',
     author: '',
     message: '',
-    updatedAt: ''
+    updatedAt: '',
+    comments: [],
   });
   useEffect(() => {
     let parsedThreadId: number = 0
@@ -24,17 +26,17 @@ const SingleThread: React.FC = () => {
       title: "Testing",
       author: "John",
       message: "I'm testing",
-      updatedAt: "2023-01-01 12:00 PM"
+      updatedAt: "2023-01-01 12:00 PM",
+      comments: [    
+        { author: 'Commenter 1', content: 'Great thread!' },
+        { author: 'Commenter 2', content: 'I agree!' },
+      ],
     };
 
     SetThread(myThread);
-    }, [threadId])
 
-  const comments = [
-    { author: 'Commenter 1', content: 'Great thread!' },
-    { author: 'Commenter 2', content: 'I agree!' },
-    // Add more comments as needed
-  ];
+
+    }, [threadId])
 
   return (
     <div>
@@ -43,7 +45,7 @@ const SingleThread: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Comments
         </Typography>
-        {comments.map((comment, index) => (
+        {thread.comments && thread.comments.map((comment, index) => (
           <Comment key={index} {...comment} />
         ))}
       </div>

@@ -6,6 +6,8 @@ import ErrorPage from './components/ErrorPage';
 import Home from './components/Home';
 import SingleThread from './components/SingleThread';
 import './index.css';
+import CreateThreadForm from './components/CreateThreadForm';
+
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
         path: "/thread/:id",
         element: <SingleThread />,
       },
+      {
+        path: "/create",
+        element: <CreateThreadForm/>
+      }
     ]
   }
 ])
