@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const CreateThreadForm: React.FC = () => {
+const ThreadInput: React.FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const navigate = useNavigate();
 
-  const handleOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log('clicked!');
     navigate('/');
   };
@@ -59,7 +59,7 @@ const CreateThreadForm: React.FC = () => {
             <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
-            <Button variant="contained" color="secondary" sx={{marginLeft: 2}} onClick={handleOnClick}>
+            <Button variant="contained" color="secondary" sx={{marginLeft: 2}} onClick={handleClick}>
               Cancel
             </Button>
           </Box>
@@ -70,4 +70,4 @@ const CreateThreadForm: React.FC = () => {
   );
 };
 
-export default CreateThreadForm;
+export default ThreadInput;

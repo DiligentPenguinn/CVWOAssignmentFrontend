@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateThread: React.FC = () => {
   const navigate = useNavigate();
-  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
   };
 
-  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     console.log('clicked!');
     navigate('/create');
   };
@@ -16,8 +16,8 @@ const CreateThread: React.FC = () => {
     <>
       <UserInput 
         placeholder='Create a new thread ...'
-        onClick={handleOnClick}
-        onChange={handleOnChange}/>
+        onClick={handleClick}
+        onChange={handleChange}/>
     </>
   );
 };

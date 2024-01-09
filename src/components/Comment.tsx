@@ -15,3 +15,5 @@ const Comment: React.FC<CommentProps> = ({ author, content }) => {
 };
 
 export default Comment;
+
+// Each comment should contain other comments that reply to it

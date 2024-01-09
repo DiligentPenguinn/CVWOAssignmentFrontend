@@ -6,7 +6,7 @@ import ErrorPage from './components/ErrorPage';
 import Home from './components/Home';
 import SingleThread from './components/SingleThread';
 import './index.css';
-import CreateThreadForm from './components/CreateThreadForm';
+import ThreadInput from './components/ThreadInput';
 
 
 const router = createBrowserRouter([
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/create",
-        element: <CreateThreadForm/>
+        element: <ThreadInput/>
       }
     ]
   }

@@ -4,7 +4,7 @@ import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
 import { Typography } from '@mui/material';
-import { CommentProps } from '../models/CommentProps';
+import CommentInput from './CommentInput';
 
 const SingleThread: React.FC = () => {
   const { threadId } = useParams<{ threadId: string }>();
@@ -49,7 +49,7 @@ const SingleThread: React.FC = () => {
           <Comment key={index} {...comment} />
         ))}
       </div>
-      {/* Add your comment input or form here */}
+      <CommentInput/>
     </div>
   );
 };
