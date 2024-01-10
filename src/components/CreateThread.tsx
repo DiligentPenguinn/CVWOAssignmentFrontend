@@ -1,6 +1,11 @@
-import React from 'react';
-import UserInput from './input/UserInput';
+import React, { ChangeEvent, MouseEventHandler } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { AppBar, Toolbar, InputBase, Box } from '@mui/material';
+import theme from '../models/Utils';
+import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
+
 
 const CreateThread: React.FC = () => {
   const navigate = useNavigate();
@@ -13,12 +18,31 @@ const CreateThread: React.FC = () => {
     navigate('/create');
   };
   return (
-    <>
-      <UserInput 
-        placeholder='Create a new thread ...'
-        onClick={handleClick}
-        onChange={handleChange}/>
-    </>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" color='primary'>
+
+          <Toolbar>
+            <IconButton
+                      size="large"
+                      edge="end"
+                      aria-label="account of current user"
+                      aria-haspopup="true"
+                      color="secondary"
+                    >
+                <AccountCircle />
+            </IconButton>
+
+              <InputBase
+                placeholder = 'Create new thread...'
+                onClick = {handleClick}
+                onChange = {handleChange}
+                fullWidth
+              />
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </ThemeProvider>
   );
 };
 

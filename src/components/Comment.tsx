@@ -1,19 +1,27 @@
-import React from 'react';
-import { Typography, Paper } from '@mui/material';
+import React, {MouseEvent, useState} from 'react';
+import { Typography, Card, CardContent, Button } from '@mui/material';
 import { CommentProps } from '../models/CommentProps';
-
+import CommentInput from './CommentInput';
 
 const Comment: React.FC<CommentProps> = ({ author, content }) => {
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setIsClicked(!isClicked);
+  }
   return (
-    <Paper elevation={3} style={{ padding: '16px', margin: '8px 0' }}>
-      <Typography variant="subtitle1" color="textSecondary">
-        {author}
-      </Typography>
-      <Typography>{content}</Typography>
-    </Paper>
+    <Card style={{ margin: '8px 0', border: 'none'}}>
+      <CardContent>
+        <Typography variant="subtitle1" color="textSecondary">
+          {author}
+        </Typography>
+        <Typography>{content}</Typography>
+      </CardContent>
+      <Button color='primary' onClick={handleButtonClick} sx={{display: 'flex', justifyContent : 'right'}}>
+        Reply
+      </Button>
+      {isClicked && <CommentInput />}
+    </Card>
   );
 };
 
 export default Comment;
-
-// Each comment should contain other comments that reply to it

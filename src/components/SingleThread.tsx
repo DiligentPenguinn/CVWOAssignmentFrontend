@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
-import { Typography } from '@mui/material';
+import { Typography, Box, Card, CardContent } from '@mui/material';
 import CommentInput from './CommentInput';
 
 const SingleThread: React.FC = () => {
@@ -39,19 +39,25 @@ const SingleThread: React.FC = () => {
     }, [threadId])
 
   return (
-    <div>
-      <Thread {...thread} />
-      <div>
-        <Typography variant="h5" gutterBottom>
-          Comments
-        </Typography>
-        {thread.comments && thread.comments.map((comment, index) => (
-          <Comment key={index} {...comment} />
-        ))}
-      </div>
-      <CommentInput/>
-    </div>
+    <>
+      <Box sx={{display: 'flex', justifyContent: 'center', margin: 4}}>
+        <Card variant='outlined' sx={{width : '80%'}}>
+          <CardContent>
+            <Thread {...thread} />
+            <CommentInput/>
+            <div>
+              {thread.comments && thread.comments.map((comment, index) => (
+                <Comment key={index} {...comment} />
+              ))}
+            </div>
+
+          </CardContent>
+        </Card>
+      </Box>
+    </>
   );
 };
 
 export default SingleThread;
+
+// Should Abstract the Box + Card + CardContent part, which is repetitive in both singleThread and ThreadInput

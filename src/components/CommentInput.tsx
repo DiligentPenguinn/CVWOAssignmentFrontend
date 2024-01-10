@@ -1,29 +1,54 @@
-import React from 'react';
-import { Typography, Paper, Button, Card, CardContent, Box } from '@mui/material';
-import { CommentProps } from '../models/CommentProps';
-import UserInput from './input/UserInput';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { AppBar, Toolbar, InputBase, Box, IconButton } from '@mui/material';
+import theme from '../models/Utils';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Send } from '@mui/icons-material';
+
 
 
 const CommentInput: React.FC = () => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
+  const [comment, setComment] = useState<string>('');
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     console.log('clicked!');
   };
   return (
-    <>
-      <Box>
-        <UserInput 
-          placeholder='Add a comment...'
-          onChange={handleChange}
-          onClick={handleClick}/>
-        <Button variant="contained" color="primary">
-          Comment
-        </Button>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" color='primary'>
+
+          <Toolbar>
+            <IconButton
+                      size="large"
+                      edge="end"
+                      aria-label="account of current user"
+                      aria-haspopup="true"
+                      color="secondary"
+                    >
+                <AccountCircle />
+            </IconButton>
+
+              <InputBase
+                placeholder = 'Add comment...'
+                onChange = {handleChange}
+                fullWidth
+                multiline
+                minRows={1}
+              />
+            <IconButton 
+              onClick={handleButtonClick}
+              disabled={comment === ''}
+            >
+              <Send color={comment === '' ? 'primary' : 'secondary'}/>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
       </Box>
-    </>
+    </ThemeProvider>
   );
 };
 
