@@ -8,6 +8,11 @@ const Comment: React.FC<CommentProps> = ({ author, content }) => {
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     setIsClicked(!isClicked);
   }
+
+  const handleComment = (event: MouseEvent<HTMLButtonElement>) => {
+    console.log('Sent!');
+    setIsClicked(false);
+  }
   return (
     <Card style={{ margin: '8px 0', border: 'none'}}>
       <CardContent>
@@ -19,7 +24,9 @@ const Comment: React.FC<CommentProps> = ({ author, content }) => {
       <Button color='primary' onClick={handleButtonClick} sx={{display: 'flex', justifyContent : 'right'}}>
         Reply
       </Button>
-      {isClicked && <CommentInput />}
+      {isClicked
+       && 
+       <CommentInput handleButtonClick={handleComment}/>}
     </Card>
   );
 };

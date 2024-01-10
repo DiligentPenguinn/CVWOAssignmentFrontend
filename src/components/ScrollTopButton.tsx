@@ -32,3 +32,5 @@ const ScrollTopButton: React.FC = () => {
 };
 
 export default ScrollTopButton;
+
+// The button doesn't work in other pages except for homepage

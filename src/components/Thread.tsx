@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography, Grid } from '@mui/material';
 import { ThreadProps } from '../models/ThreadProps';
 
-const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt }) => {
+const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, tags }) => {
   return (
     <Card variant="outlined" style={{margin: 16}}>
       <CardContent>
@@ -21,6 +21,9 @@ const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt }
             </Typography>
           </Grid>
         </Grid>
+        <Typography>
+          Tags: {tags && tags.map(tag => `${tag} `)}
+        </Typography>
         <Typography variant="body1">
           <div className='half-hidden'>
             {message}

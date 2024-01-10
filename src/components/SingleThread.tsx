@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
 import { Typography, Box, Card, CardContent } from '@mui/material';
 import CommentInput from './CommentInput';
+import { CommentProps } from '../models/CommentProps';
 
 const SingleThread: React.FC = () => {
   const { threadId } = useParams<{ threadId: string }>();
-  const [thread, SetThread] = useState<ThreadProps>({
+  const [thread, setThread] = useState<ThreadProps>({
     id: 0,
     title: '',
     author: '',
@@ -16,6 +17,15 @@ const SingleThread: React.FC = () => {
     updatedAt: '',
     comments: [],
   });
+
+  const [comment, setComment] = useState<CommentProps>({
+    author: '',
+    content: '',
+    replies: [],
+  })
+  const handleComment = (event: MouseEvent<HTMLButtonElement>) => {
+    console.log('Comment sent!');
+  }
   useEffect(() => {
     let parsedThreadId: number = 0
     if (threadId) {
@@ -31,9 +41,10 @@ const SingleThread: React.FC = () => {
         { author: 'Commenter 1', content: 'Great thread!' },
         { author: 'Commenter 2', content: 'I agree!' },
       ],
+      tags: ['tag1', 'tag2', 'tag3'],
     };
 
-    SetThread(myThread);
+    setThread(myThread);
 
 
     }, [threadId])
@@ -44,7 +55,9 @@ const SingleThread: React.FC = () => {
         <Card variant='outlined' sx={{width : '80%'}}>
           <CardContent>
             <Thread {...thread} />
-            <CommentInput/>
+            <CommentInput
+              key={0}
+              handleButtonClick={handleComment}/>
             <div>
               {thread.comments && thread.comments.map((comment, index) => (
                 <Comment key={index} {...comment} />

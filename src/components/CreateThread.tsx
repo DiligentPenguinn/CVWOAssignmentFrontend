@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEventHandler } from 'react';
+import React, { ChangeEvent, MouseEventHandler, useEffect, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppBar, Toolbar, InputBase, Box } from '@mui/material';
 import theme from '../models/Utils';
@@ -17,6 +17,8 @@ const CreateThread: React.FC = () => {
     console.log('clicked!');
     navigate('/create');
   };
+
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>

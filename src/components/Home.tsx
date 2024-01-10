@@ -16,6 +16,7 @@ const Home: React.FC = () => {
         author: 'John Doe',
         message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum enim aspernatur at sunt eos iure et dolorem, numquam ducimus soluta veniam rerum possimus aliquam recusandae vel. Iusto accusantium laboriosam odit officiis rerum? Eaque, autem! Iusto quis debitis quos eos voluptatem iure aspernatur pariatur. Porro, quae numquam laboriosam quidem autem harum at libero nam dolorum distinctio laudantium quasi dolor incidunt similique maiores eveniet labore veritatis! Rem ullam tempore tempora! Vel doloribus alias nihil tempore quisquam? Quam fugit fuga amet suscipit sint, dolorum maiores, corrupti omnis a illum eveniet molestiae magnam ullam error nisi temporibus possimus laudantium. Reiciendis qui consequatur officia eius.',
         updatedAt: '2023-01-01 12:00 PM',
+        tags: ['one', 'tag2', 'tag3'],
       },
       {
         id: 2,

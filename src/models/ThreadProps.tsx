@@ -7,4 +7,5 @@ export interface ThreadProps {
   message: string;
   updatedAt: string;
   comments?: CommentProps[];
+  tags?: string[];
 }

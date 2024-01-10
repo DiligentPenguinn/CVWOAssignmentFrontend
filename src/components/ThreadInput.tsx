@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
-import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
+import React, { useState, useEffect, MouseEvent } from 'react';
+import { Card, CardContent, TextField, Button, Typography, Box, Stack} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Chip from '@mui/material/Chip';
 
 const ThreadInput: React.FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [clickedTags, setClickedTags] = useState<string[]>([]);
+
   const navigate = useNavigate();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     console.log('clicked!');
     navigate('/');
   };
+
+  const handleChipClick = (tag: string) => {
+    if (clickedTags.includes(tag)) {
+      setClickedTags(clickedTags.filter(clickedTag => clickedTag !== tag));
+    } else {
+      setClickedTags([...clickedTags, tag]);
+    }
+  }
+
+  const isClicked = (tag: string) => {
+    return clickedTags.includes(tag);
+  }
+
+  
+
+  useEffect(() => {
+    let my_tags : string[] = ['tag1', 'tag2', 'tag3'];
+    setTags(my_tags);
+  }, [tags]);
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -55,6 +79,14 @@ const ThreadInput: React.FC = () => {
               minRows={4}
             />
           </Box>
+          <Stack direction="row" spacing={1} sx={{marginBottom : 2}}>
+            {tags && tags.map(tag => {
+              return <Chip 
+                      label={tag} 
+                      onClick={() => handleChipClick(tag)} 
+                      variant={isClicked(tag) ? 'filled' : 'outlined'}/>
+            })}
+         </Stack>
           <Box >
             <Button type="submit" variant="contained" color="primary">
               Submit
