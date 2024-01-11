@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Stack } from '@mui/material';
+import Chip from '@mui/material/Chip';
 import { ThreadProps } from '../models/ThreadProps';
 
 const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, tags }) => {
@@ -21,9 +22,14 @@ const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, 
             </Typography>
           </Grid>
         </Grid>
-        <Typography>
-          Tags: {tags && tags.map(tag => `${tag} `)}
-        </Typography>
+        <Stack direction="row" spacing={1} sx={{marginBottom : 2}}>
+            {tags && tags.map(tag => {
+              return <Chip 
+                      label={tag}
+                      variant='outlined'
+                      />
+            })}
+         </Stack>
         <Typography variant="body1">
           <div className='half-hidden'>
             {message}

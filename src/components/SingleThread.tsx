@@ -23,8 +23,8 @@ const SingleThread: React.FC = () => {
     content: '',
     replies: [],
   })
-  const handleComment = (event: MouseEvent<HTMLButtonElement>) => {
-    console.log('Comment sent!');
+  const handleReply = (event: MouseEvent<HTMLButtonElement>) => {
+    console.log(event);
   }
   useEffect(() => {
     let parsedThreadId: number = 0
@@ -38,7 +38,10 @@ const SingleThread: React.FC = () => {
       message: "I'm testing",
       updatedAt: "2023-01-01 12:00 PM",
       comments: [    
-        { author: 'Commenter 1', content: 'Great thread!' },
+        { author: 'Commenter 1', 
+          content: 'Great thread!' , 
+          replies: [{author: 'Commenter 3', content: 'Amazing!',
+                      replies: [{author: 'Commenter 4', content: 'Commenter 3 is right!'}]}]},
         { author: 'Commenter 2', content: 'I agree!' },
       ],
       tags: ['tag1', 'tag2', 'tag3'],
@@ -57,10 +60,10 @@ const SingleThread: React.FC = () => {
             <Thread {...thread} />
             <CommentInput
               key={0}
-              handleButtonClick={handleComment}/>
+              handleButtonClick={handleReply}/>
             <div>
               {thread.comments && thread.comments.map((comment, index) => (
-                <Comment key={index} {...comment} />
+                <Comment key={index} {...comment} handleReply={handleReply} />
               ))}
             </div>
 
