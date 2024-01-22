@@ -3,8 +3,8 @@ import { CommentProps } from "./CommentProps";
 export interface ThreadProps {
   id: number;
   title: string;
-  author: string;
-  message: string;
+  user_id: number;
+  body: string;
   updatedAt: string;
   comments?: CommentProps[];
   tags?: string[];

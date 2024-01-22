@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Grid, Stack } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { ThreadProps } from '../models/ThreadProps';
 
-const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, tags }) => {
+const Thread: React.FC<ThreadProps> = ({ title, body, updatedAt, tags }) => {
   return (
     <Card variant="outlined" style={{margin: 16}}>
       <CardContent>
@@ -11,11 +11,11 @@ const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, 
           {title}
         </Typography>
         <Grid container alignItems="center" spacing={1}>
-          <Grid item>
+          {/* <Grid item>
             <Typography variant="subtitle1" color="textSecondary">
               Posted by {author}
             </Typography>
-          </Grid>
+          </Grid> */}
           <Grid item>
             <Typography variant="caption" color="textSecondary">
               Updated at: {updatedAt}
@@ -32,7 +32,7 @@ const Thread: React.FC<ThreadProps> = ({ id, title, author, message, updatedAt, 
          </Stack>
         <Typography variant="body1">
           <div className='half-hidden'>
-            {message}
+            {body}
           </div>
         </Typography>
 

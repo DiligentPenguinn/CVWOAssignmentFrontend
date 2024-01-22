@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
 
 export interface CommentProps {
-  author: string;
+  user_id: number;
   content: string;
   replies?: CommentProps[];
   handleReply?: MouseEventHandler;
