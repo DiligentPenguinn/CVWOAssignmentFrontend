@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Grid, Stack } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { ThreadProps } from '../models/ThreadProps';
 
-const Thread: React.FC<ThreadProps> = ({ title, body, updatedAt, tags }) => {
+const Thread: React.FC<ThreadProps> = ({id, title, body, updated_at, tags }) => {
   return (
     <Card variant="outlined" style={{margin: 16}}>
       <CardContent>
@@ -18,7 +18,7 @@ const Thread: React.FC<ThreadProps> = ({ title, body, updatedAt, tags }) => {
           </Grid> */}
           <Grid item>
             <Typography variant="caption" color="textSecondary">
-              Updated at: {updatedAt}
+              Updated at: {updated_at}
             </Typography>
           </Grid>
         </Grid>

@@ -3,7 +3,7 @@ import { Typography, Card, CardContent, Button, Box } from '@mui/material';
 import { CommentProps } from '../models/CommentProps';
 import CommentInput from './CommentInput';
 
-const Comment: React.FC<CommentProps> = ({ content, replies, handleReply }) => {
+const Comment: React.FC<CommentProps> = ({ body, handleReply }) => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     setIsClicked(!isClicked);
@@ -19,7 +19,7 @@ const Comment: React.FC<CommentProps> = ({ content, replies, handleReply }) => {
         {/* <Typography variant="subtitle1" color="textSecondary">
           {author}
         </Typography> */}
-        <Typography>{content}</Typography>
+        <Typography>{body}</Typography>
       </CardContent>
       <Button color='primary' onClick={handleButtonClick} sx={{display: 'flex', justifyContent : 'right'}}>
         Reply
@@ -27,11 +27,11 @@ const Comment: React.FC<CommentProps> = ({ content, replies, handleReply }) => {
       {isClicked
        && 
        <CommentInput handleButtonClick={handleReply ? handleReply : () => console.log('nothing happens')}/>}
-       <Box sx={{marginLeft: 2}}>
+       {/* <Box sx={{marginLeft: 2}}>
           {replies && replies.map(reply => {
               return <Comment {... reply} handleReply={handleReply}/>
           })}
-        </Box>
+        </Box> */}
     </Card>
   );
 };

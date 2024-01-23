@@ -1,11 +1,9 @@
-import { CommentProps } from "./CommentProps";
-
 export interface ThreadProps {
   id: number;
-  title: string;
   user_id: number;
+  title: string;
   body: string;
-  updatedAt: string;
-  comments?: CommentProps[];
+  created_at: string;
+  updated_at: string;
   tags?: string[];
 }

@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../models/Utils';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -59,6 +60,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  // const { setJwtToken } = useOutletContext<{setJwtToken : React.Dispatch<React.SetStateAction<string>>}>();
+  // const { setAlertClassName } = useOutletContext<{setAlertClassName : React.Dispatch<React.SetStateAction<string>>}>();
+  // const { setAlertMessage } = useOutletContext<{setAlertMessage : React.Dispatch<React.SetStateAction<string>>}>();
+  // const { toggleRefresh } = useOutletContext<{toggleRefresh : (status: boolean) => void}>();
+  const { jwtToken = '' } = useOutletContext<{ jwtToken?: string }>();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -156,6 +162,8 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
@@ -187,22 +195,9 @@ export default function PrimarySearchAppBar() {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>
+
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton size="large" aria-label="show 4 new mails" color="secondary">
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="secondary"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
               <IconButton
                 size="large"
                 edge="end"
@@ -215,6 +210,7 @@ export default function PrimarySearchAppBar() {
                 <AccountCircle />
               </IconButton>
             </Box>
+
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size="large"

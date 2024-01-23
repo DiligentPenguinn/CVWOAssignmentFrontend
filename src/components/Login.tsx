@@ -3,7 +3,7 @@ import { Card, CardContent, TextField, Button, Typography, Box, Stack} from '@mu
 import { useNavigate } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 
-const ThreadInput: React.FC = () => {
+const Login: React.FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -119,4 +119,4 @@ const ThreadInput: React.FC = () => {
   );
 };
 
-export default ThreadInput;
+export default Login;

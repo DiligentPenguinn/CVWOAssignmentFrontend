@@ -12,7 +12,7 @@ const SingleThread: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [thread, setThread] = useState<ThreadProps>();
 
-  const [comment, setComment] = useState<CommentProps>()
+  const [comments, setComments] = useState<CommentProps[]>()
 
   // {
   //   user_id: 0,
@@ -48,6 +48,24 @@ const SingleThread: React.FC = () => {
         console.log(err);
     })
 
+    headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    requestOptions = {
+        method: "GET",
+        headers: headers,
+    }
+
+    fetch(`http://localhost:8080/thread/${parsedId}/comments`, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+        setComments(data);
+        console.log(thread)
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
     }, [id])
 
   return (
@@ -61,8 +79,8 @@ const SingleThread: React.FC = () => {
                 key={0}
                 handleButtonClick={handleReply}/>
               <div>
-                {thread.comments && thread.comments.map((comment, index) => (
-                  <Comment key={index} {...comment} handleReply={handleReply} />
+                {comments && comments.map((comment) => (
+                  <Comment {...comment} handleReply={handleReply} />
                 ))}
               </div>
 
