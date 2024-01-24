@@ -18,7 +18,6 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../models/Utils';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { useCustomContext } from '../App';
 import { jwtContext } from './Context';
 import { Button } from '@mui/material';
 import LoginButton from './LoginButton';

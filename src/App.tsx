@@ -3,14 +3,8 @@ import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import ScrollTopButton from './components/ScrollTopButton';
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
 import { createContext } from 'react';
-import { jwtContext } from './components/Context';
-
-
-type ContextType = { 
-  jwtToken : String,
-  setJwtToken : React.Dispatch<React.SetStateAction<String>>,
-  toggleRefresh : (status: boolean) => void
-};
+import { MyContext, jwtContext } from './components/Context';
+import { MyContextProps } from './components/Context';
 
 const App: React.FC = () => {
   const [jwtToken, setJwtToken] = useState<String>("");
@@ -91,18 +85,22 @@ const App: React.FC = () => {
         })
     }
   }, [jwtToken, toggleRefresh])
+
+  const contextValue: MyContextProps = {
+    jwtToken,
+    setJwtToken,
+    alertClassName,
+    alertMessage,
+    toggleRefresh,
+  };
+  
   return (
     <div>
-      <jwtContext.Provider value={jwtToken}>
+      <MyContext.Provider value={contextValue}>
         <PrimarySearchAppBar/>
-      </jwtContext.Provider>
-      <ScrollTopButton></ScrollTopButton>
-      <Outlet             
-        context={{
-          jwtToken,
-          setJwtToken,
-          toggleRefresh
-            } satisfies ContextType}/>
+        <ScrollTopButton></ScrollTopButton>
+        <Outlet/>
+      </MyContext.Provider>
 
     </div>
 
@@ -110,7 +108,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-export function useCustomContext() {
-  return useOutletContext<ContextType>();
-}

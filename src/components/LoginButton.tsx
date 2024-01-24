@@ -1,93 +1,96 @@
 import React, { useState, useEffect, MouseEvent, useContext } from 'react';
 import { Card, CardContent, TextField, Button, Typography, Box, Stack, Paper, Container, Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import { Link } from 'react-router-dom';
-import { toggleLoginContext } from './Context';
+import { MyContext } from './Context';
 
 const LoginButton: React.FC = () => {
-  const toggleLogin = useContext(toggleLoginContext);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
-  const [clickedTags, setClickedTags] = useState<string[]>([]);
-
+  const [username, setUsername] = useState<String>('');
+  const [password, setPassword] = useState<String>('');
+  const [email, setEmail] = useState<String>('');
+  const {setJwtToken, toggleRefresh} = useContext(MyContext);
+  // const { setJwtToken } = useOutletContext<{ setJwtToken: React.Dispatch<React.SetStateAction<string>> }>();
+  // const { setAlertClassName } = useOutletContext<{ setAlertClassName: React.Dispatch<React.SetStateAction<string>> }>();
+  // const { setAlertMessage } = useOutletContext<{ setAlertMessage: React.Dispatch<React.SetStateAction<string>> }>();
+  // const { toggleRefresh } = useOutletContext<{ toggleRefresh: (status: boolean) => void }>();
+  
   const navigate = useNavigate();
 
-  const handleCancel = (event: MouseEvent<HTMLButtonElement>) => {
-    navigate('/');
-  };
-
-  const handleChipClick = (tag: string) => {
-    if (clickedTags.includes(tag)) {
-      setClickedTags(clickedTags.filter(clickedTag => clickedTag !== tag));
-    } else {
-      setClickedTags([...clickedTags, tag]);
-    }
-  }
-
-  const isClicked = (tag: string) => {
-    return clickedTags.includes(tag);
-  }
-
-  
-
   useEffect(() => {
-    let my_tags : string[] = ['tag1', 'tag2', 'tag3'];
-    setTags(my_tags);
-  }, [tags]);
+  }, [username]);
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate inputs if needed
+    let payload = {
+      username: username,
+      password: password,
+  }
 
-    // Call the onSubmit callback with the thread data
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
+  const requestOptions: RequestInit = {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify(payload),
+  };
 
-    let requestOptions = {
-        method: "GET",
-        headers: headers,
-    }
-
-    // fetch(`http://localhost:8080/thread/${parsedId}`, requestOptions)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     setThread(data);
-    //     console.log(thread)
-    // })
-    // .catch(err => {
-    //     console.log(err);
-    // })
+  fetch(`http://localhost:8080/authenticate`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+          if (data.error) {
+            console.log(data.error)
+              // setAlertClassName("alert-danger");
+              // setAlertMessage(data.message);
+          } else {
+              setJwtToken(data.access_token);
+              // setAlertClassName("d-none");
+              // setAlertMessage("");
+              toggleRefresh(true);
+              navigate("/");
+          }
+      })
+      .catch(error => {
+        console.log(error);
+          // setAlertClassName("alert-danger");
+          // setAlertMessage(error);
+      })
     // Clear the form after submission
-    setTitle('');
-    setBody('');
+    setUsername('');
+    setPassword('');
+    setEmail('');
+    
     console.log("submitted succesfully!")
     navigate("/");
   };
 
-    const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState<String>("");
   
-    const handleOpen = () => {
-      setOpen(true);
+    const handleLogin = () => {
+      setStatus("login");
     };
   
     const handleClose = () => {
-      setOpen(false);
+      setStatus("");
     };
+
+    const handleSignUp = () => {
+      setStatus("signup");
+    }
 
 
   return (
-      <Container component="main" maxWidth="xs">
+      <>
         <Button 
           variant="contained"
           color="primary"
-          onClick={handleOpen}
+          onClick={handleLogin}
         >
             Login
         </Button>
-          <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
+          <Dialog open={status === "login"} onClose={handleClose} maxWidth="xs" fullWidth>
             <DialogTitle>Login</DialogTitle>
             <DialogContent>
               <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -100,6 +103,8 @@ const LoginButton: React.FC = () => {
                   label="Username"
                   name="username"
                   autoFocus
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                 />
                 <TextField
                   variant="outlined"
@@ -110,22 +115,88 @@ const LoginButton: React.FC = () => {
                   label="Password"
                   type="password"
                   id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary">
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="contained" color="secondary">
+                    Log In
+                  </Button>
+                </DialogActions>
               </form>
             </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="secondary">
-                Cancel
-              </Button>
-              <Button type="submit" variant="contained" color="secondary">
-                Log In
-              </Button>
-            </DialogActions>
             <Typography style={{ textAlign: 'center', marginTop: '10px' }}>
-              Don't have an account? <Link to={`somewhere`}>Sign Up</Link>
+              Don't have an account? 
+              <Button variant="text" onClick={handleSignUp} sx={{color:"blue"}} >
+                  Sign Up
+              </Button>
             </Typography>
           </Dialog>
-      </Container>
+
+          <Dialog open={status === "signup"} onClose={handleClose} maxWidth="xs" fullWidth>
+            <DialogTitle>Sign Up</DialogTitle>
+            <DialogContent>
+              <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+              <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoFocus
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoFocus
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                />
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary">
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="contained" color="secondary">
+                    Sign Up
+                  </Button>
+                </DialogActions>
+              </form>
+            </DialogContent>
+            <Typography style={{ textAlign: 'center', marginTop: '10px' }}>
+              Already have an account? 
+              <Button 
+                variant="text" 
+                onClick={handleLogin} 
+                sx={{color:"blue"}}>
+                  Login
+              </Button>
+            </Typography>
+          </Dialog>
+        </>
   );
 };
 
