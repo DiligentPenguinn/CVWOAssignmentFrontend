@@ -17,7 +17,12 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../models/Utils';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { useCustomContext } from '../App';
+import { jwtContext } from './Context';
+import { Button } from '@mui/material';
+import LoginButton from './LoginButton';
+import { Login } from '@mui/icons-material';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -60,11 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  // const { setJwtToken } = useOutletContext<{setJwtToken : React.Dispatch<React.SetStateAction<string>>}>();
-  // const { setAlertClassName } = useOutletContext<{setAlertClassName : React.Dispatch<React.SetStateAction<string>>}>();
-  // const { setAlertMessage } = useOutletContext<{setAlertMessage : React.Dispatch<React.SetStateAction<string>>}>();
-  // const { toggleRefresh } = useOutletContext<{toggleRefresh : (status: boolean) => void}>();
-  const { jwtToken = '' } = useOutletContext<{ jwtToken?: string }>();
+  const jwtToken = React.useContext(jwtContext);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -127,26 +128,6 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="primary">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="primary"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -195,22 +176,30 @@ export default function PrimarySearchAppBar() {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>
-
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="secondary"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-
+            {jwtToken === ""
+            ? <>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  <LoginButton/>
+                </Box>
+              </>
+            :<>
+              <Box sx={{ flexGrow: 1 }} />
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <IconButton
+                  size="large"
+                  // edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="secondary"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Box>
+            </>
+            }
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size="large"

@@ -1,7 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import ScrollTopButton from './components/ScrollTopButton';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
+import { createContext } from 'react';
+import { jwtContext } from './components/Context';
+
+
+type ContextType = { 
+  jwtToken : String,
+  setJwtToken : React.Dispatch<React.SetStateAction<String>>,
+  toggleRefresh : (status: boolean) => void
+};
 
 const App: React.FC = () => {
   const [jwtToken, setJwtToken] = useState<String>("");
@@ -84,16 +93,16 @@ const App: React.FC = () => {
   }, [jwtToken, toggleRefresh])
   return (
     <div>
-      <PrimarySearchAppBar/>
+      <jwtContext.Provider value={jwtToken}>
+        <PrimarySearchAppBar/>
+      </jwtContext.Provider>
       <ScrollTopButton></ScrollTopButton>
       <Outlet             
         context={{
           jwtToken,
           setJwtToken,
-          setAlertClassName,
-          setAlertMessage,
-          toggleRefresh,
-            }}/>
+          toggleRefresh
+            } satisfies ContextType}/>
 
     </div>
 
@@ -101,3 +110,7 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+export function useCustomContext() {
+  return useOutletContext<ContextType>();
+}

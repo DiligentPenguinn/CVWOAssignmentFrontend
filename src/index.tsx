@@ -7,6 +7,7 @@ import Home from './components/Home';
 import SingleThread from './components/SingleThread';
 import './index.css';
 import ThreadInput from './components/ThreadInput';
+import LoginButton from './components/LoginButton';
 
 
 const router = createBrowserRouter([
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <ThreadInput/>
-      }
+      },
     ]
   }
 ])
