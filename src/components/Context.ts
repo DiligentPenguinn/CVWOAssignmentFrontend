@@ -1,13 +1,17 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
-export const jwtContext = createContext<String>("");
-
-export interface MyContextProps {
-  jwtToken: String;
-  alertClassName: String;
-  alertMessage: String;
-  setJwtToken: React.Dispatch<React.SetStateAction<String>>;
-  toggleRefresh: (status: Boolean) => void;
+type jwtContext = {
+  jwtToken : string
+  setJwtToken: React.Dispatch<React.SetStateAction<string>>
+  toggleRefresh: (status : boolean) => void
 }
 
-export const MyContext = createContext<MyContextProps | undefined>(undefined);
+export const jwtContext = createContext<jwtContext | null>(null);
+
+export const useJwtContext = () => {
+  const context = useContext(jwtContext);
+  if (context === null) {
+    throw new Error("Something");
+  }
+  return context;
+}

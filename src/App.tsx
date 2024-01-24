@@ -3,36 +3,18 @@ import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import ScrollTopButton from './components/ScrollTopButton';
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
 import { createContext } from 'react';
-import { MyContext, jwtContext } from './components/Context';
-import { MyContextProps } from './components/Context';
+import { jwtContext } from './components/Context';
 
 const App: React.FC = () => {
-  const [jwtToken, setJwtToken] = useState<String>("");
-  const [alertMessage, setAlertMessage] = useState<String>("");
-  const [alertClassName, setAlertClassName] = useState<String>("d-none");
+  const [jwtToken, setJwtToken] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertClassName, setAlertClassName] = useState<string>("d-none");
 
   const [tickInterval, setTickInterval] = useState<NodeJS.Timeout>();
 
   const navigate = useNavigate();
-  const logOut = () => {
-    const requestOptions = {
-      method: "GET",
-      credentials: "include" as RequestCredentials,
-    }
 
-    fetch(`http://localhost:8080/logout`, requestOptions)
-    .catch(error => {
-      console.log("error logging out", error);
-    })
-    .finally(() => {
-      setJwtToken("");
-      toggleRefresh(false);
-    })
-
-    navigate("/login");
-  }
-
-  const toggleRefresh = useCallback((status : Boolean) => {
+  const toggleRefresh = useCallback((status : boolean) => {
     console.log("clicked");
 
     if (status) {
@@ -67,9 +49,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (jwtToken === "") {
-      const requestOptions = {
+      const requestOptions : RequestInit= {
         method: "GET",
-        credentials: "include" as RequestCredentials,
+        credentials: "include",
       }
 
       fetch(`http://localhost:8080/refresh`, requestOptions)
@@ -85,22 +67,14 @@ const App: React.FC = () => {
         })
     }
   }, [jwtToken, toggleRefresh])
-
-  const contextValue: MyContextProps = {
-    jwtToken,
-    setJwtToken,
-    alertClassName,
-    alertMessage,
-    toggleRefresh,
-  };
   
   return (
     <div>
-      <MyContext.Provider value={contextValue}>
+      <jwtContext.Provider value={{jwtToken, setJwtToken, toggleRefresh}}>
         <PrimarySearchAppBar/>
         <ScrollTopButton></ScrollTopButton>
         <Outlet/>
-      </MyContext.Provider>
+      </jwtContext.Provider>
 
     </div>
 

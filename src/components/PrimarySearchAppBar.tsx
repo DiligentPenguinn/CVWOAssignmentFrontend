@@ -6,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,7 +17,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../models/Utils';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { jwtContext } from './Context';
+import { jwtContext, useJwtContext } from './Context';
 import { Button } from '@mui/material';
 import LoginButton from './LoginButton';
 import { Login } from '@mui/icons-material';
@@ -64,7 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const jwtToken = React.useContext(jwtContext);
+  const {jwtToken, setJwtToken, toggleRefresh} = useJwtContext();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -88,6 +87,24 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogOut = () => {
+      const requestOptions = {
+        method: "GET",
+        credentials: "include" as RequestCredentials,
+      }
+  
+      fetch(`http://localhost:8080/logout`, requestOptions)
+      .catch(error => {
+        console.log("error logging out", error);
+      })
+      .finally(() => {
+        setJwtToken("");
+        toggleRefresh(false);
+      })
+
+      handleMenuClose();
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -106,7 +123,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 

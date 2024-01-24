@@ -3,72 +3,80 @@ import { Card, CardContent, TextField, Button, Typography, Box, Stack, Paper, Co
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import { Link } from 'react-router-dom';
-import { MyContext } from './Context';
+import { useJwtContext } from './Context';
 
 const LoginButton: React.FC = () => {
-  const [username, setUsername] = useState<String>('');
-  const [password, setPassword] = useState<String>('');
-  const [email, setEmail] = useState<String>('');
-  const {setJwtToken, toggleRefresh} = useContext(MyContext);
-  // const { setJwtToken } = useOutletContext<{ setJwtToken: React.Dispatch<React.SetStateAction<string>> }>();
-  // const { setAlertClassName } = useOutletContext<{ setAlertClassName: React.Dispatch<React.SetStateAction<string>> }>();
-  // const { setAlertMessage } = useOutletContext<{ setAlertMessage: React.Dispatch<React.SetStateAction<string>> }>();
-  // const { toggleRefresh } = useOutletContext<{ toggleRefresh: (status: boolean) => void }>();
-  
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const {setJwtToken, toggleRefresh} = useJwtContext();
+
   const navigate = useNavigate();
 
   useEffect(() => {
   }, [username]);
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleLoginRequest = () => {
     let payload = {
       username: username,
       password: password,
-  }
+    }
 
-  const requestOptions: RequestInit = {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    body: JSON.stringify(payload),
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    };
+
+    fetch(`http://localhost:8080/authenticate`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.error) {
+              console.log(data.message)
+                // setAlertClassName("alert-danger");
+                // setAlertMessage(data.message);
+            } else {
+                setJwtToken(data.access_token);
+                // setAlertClassName("d-none");
+                // setAlertMessage("");
+                toggleRefresh(true);
+                navigate("/");
+            }
+        })
+        .catch(error => {
+          console.log(error);
+            // setAlertClassName("alert-danger");
+            // setAlertMessage(error);
+        })
+      // Clear the form after submission
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      
+      console.log("submitted succesfully!")
+      handleClose();
   };
 
-  fetch(`http://localhost:8080/authenticate`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-          if (data.error) {
-            console.log(data.error)
-              // setAlertClassName("alert-danger");
-              // setAlertMessage(data.message);
-          } else {
-              setJwtToken(data.access_token);
-              // setAlertClassName("d-none");
-              // setAlertMessage("");
-              toggleRefresh(true);
-              navigate("/");
-          }
-      })
-      .catch(error => {
-        console.log(error);
-          // setAlertClassName("alert-danger");
-          // setAlertMessage(error);
-      })
-    // Clear the form after submission
-    setUsername('');
-    setPassword('');
-    setEmail('');
-    
-    console.log("submitted succesfully!")
-    navigate("/");
+  const handleSignUpRequest = () => {
+    console.log("Sign up!");
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "login") {
+      // User logs in
+      handleLoginRequest();
+    } else {
+      // User signs up
+      handleSignUpRequest();
+    }
   };
 
-    const [status, setStatus] = useState<String>("");
+    const [status, setStatus] = useState<string>("");
   
-    const handleLogin = () => {
+    const openLogin = () => {
       setStatus("login");
     };
   
@@ -76,7 +84,7 @@ const LoginButton: React.FC = () => {
       setStatus("");
     };
 
-    const handleSignUp = () => {
+    const openSignUp = () => {
       setStatus("signup");
     }
 
@@ -86,7 +94,7 @@ const LoginButton: React.FC = () => {
         <Button 
           variant="contained"
           color="primary"
-          onClick={handleLogin}
+          onClick={openLogin}
         >
             Login
         </Button>
@@ -130,7 +138,7 @@ const LoginButton: React.FC = () => {
             </DialogContent>
             <Typography style={{ textAlign: 'center', marginTop: '10px' }}>
               Don't have an account? 
-              <Button variant="text" onClick={handleSignUp} sx={{color:"blue"}} >
+              <Button variant="text" onClick={openSignUp} sx={{color:"blue"}} >
                   Sign Up
               </Button>
             </Typography>
@@ -190,7 +198,7 @@ const LoginButton: React.FC = () => {
               Already have an account? 
               <Button 
                 variant="text" 
-                onClick={handleLogin} 
+                onClick={openLogin} 
                 sx={{color:"blue"}}>
                   Login
               </Button>
