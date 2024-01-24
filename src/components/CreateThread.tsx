@@ -5,7 +5,8 @@ import theme from '../models/Utils';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
-
+import { useJwtContext } from './Context';
+import LoginForm from './LoginForm';
 
 const CreateThread: React.FC = () => {
   const navigate = useNavigate();
@@ -13,18 +14,31 @@ const CreateThread: React.FC = () => {
     console.log(event.target.value);
   };
 
+  const [status, setStatus] = useState<string>("");
+  const handleClose = () => {
+    setStatus("");
+  }
+  const {jwtToken} = useJwtContext();
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     console.log('clicked!');
-    navigate('/create');
+    if (jwtToken === "") {
+      setStatus("login");
+    } else {
+      navigate('/create');
+    }
   };
 
 
   return (
+    
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
+        <LoginForm status={status} setStatus={setStatus} handleClose={handleClose}/>
         <AppBar position="static" color='primary'>
 
           <Toolbar>
+            {jwtToken !== "" 
+            &&
             <IconButton
                       size="large"
                       edge="end"
@@ -34,6 +48,7 @@ const CreateThread: React.FC = () => {
                     >
                 <AccountCircle />
             </IconButton>
+            }
 
               <InputBase
                 placeholder = 'Create new thread...'
