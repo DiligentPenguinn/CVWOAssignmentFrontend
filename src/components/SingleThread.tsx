@@ -1,28 +1,17 @@
-import React, { useEffect, useState, MouseEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Thread from './Thread';
 import Comment from './Comment'; // Import the Comment component
 import { ThreadProps } from '../models/ThreadProps';
-import { Typography, Box, Card, CardContent } from '@mui/material';
+import { Box, Card, CardContent } from '@mui/material';
 import CommentInput from './CommentInput';
 import { CommentProps } from '../models/CommentProps';
-import { title } from 'process';
 
 const SingleThread: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [thread, setThread] = useState<ThreadProps>();
 
   const [comments, setComments] = useState<CommentProps[]>()
-
-  // {
-  //   user_id: 0,
-  //   content: '',
-  //   replies: [],
-  // }
-
-  const handleReply = (event: MouseEvent<HTMLButtonElement>) => {
-    console.log(event);
-  }
 
   useEffect(() => {
     let parsedId: number = 0
@@ -60,7 +49,6 @@ const SingleThread: React.FC = () => {
     .then((response) => response.json())
     .then((data) => {
         setComments(data);
-        console.log(thread)
     })
     .catch(err => {
         console.log(err);
@@ -76,11 +64,11 @@ const SingleThread: React.FC = () => {
             <CardContent>
               <Thread {...thread} />
               <CommentInput
-                key={0}
-                handleButtonClick={handleReply}/>
+                ID={thread.id}
+                type={"comment"}/>
               <div>
                 {comments && comments.map((comment) => (
-                  <Comment {...comment} handleReply={handleReply} />
+                  <Comment {...comment} />
                 ))}
               </div>
 
@@ -94,5 +82,3 @@ const SingleThread: React.FC = () => {
 };
 
 export default SingleThread;
-
-// Should Abstract the Box + Card + CardContent part, which is repetitive in both singleThread and ThreadInput

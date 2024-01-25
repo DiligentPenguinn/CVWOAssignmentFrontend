@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -11,16 +11,13 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../models/Utils';
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { jwtContext, useJwtContext } from './Context';
-import { Button } from '@mui/material';
+import { useJwtContext } from './Context';
 import LoginButton from './LoginButton';
-import { Login } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -69,7 +66,10 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/");
+  }
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -179,7 +179,13 @@ export default function PrimarySearchAppBar() {
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+              onClick={handleClick}
             >
               MyWebForum
             </Typography>

@@ -1,22 +1,16 @@
-import React, { useState, useEffect, MouseEvent, useContext } from 'react';
-import { Card, CardContent, TextField, Button, Typography, Box, Stack, Paper, Container, Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import Chip from '@mui/material/Chip';
-import { Link } from 'react-router-dom';
-import { useJwtContext } from './Context';
+import React from 'react';
+import { Button } from '@mui/material';
+import { useLoginFormContext } from './Context';
 import LoginForm from './LoginForm';
 
 const LoginButton: React.FC = () => {
-  const [status, setStatus] = useState<string>("");
+  const {status, setStatus, handleClose} = useLoginFormContext();
   
   const openLogin = () => {
       setStatus("login");
   };
-  
-  const handleClose = () => {
-      setStatus("");
-  };
 
+  
   return (
       <>
         <Button 

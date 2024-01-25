@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
+import { TextField, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Alert, Snackbar} from '@mui/material';
 import { LoginFormProps } from '../models/LoginFormProps';
 import { useJwtContext } from './Context';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
+
+  const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [isUsernameError, setIsUsernameError] = useState<boolean>(false);
+  const [isPasswordError, setIsPasswordError] = useState<boolean>(false); 
   const {setJwtToken, toggleRefresh} = useJwtContext();
 
   const navigate = useNavigate();
   useEffect(() => {
   }, []);
   
+  const handleClosePopUp = () => {
+    setIsSuccessful(false);
+  }
   const handleLoginRequest = () => {
+    // Reset error
+    setIsPasswordError(false);
+    setIsUsernameError(false);
     let payload = {
       username: username,
       password: password,
@@ -33,33 +46,57 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
         .then((response) => response.json())
         .then((data) => {
             if (data.error) {
-              console.log(data.message)
-                // setAlertClassName("alert-danger");
-                // setAlertMessage(data.message);
+
+              setError(data.message);
+              error.includes("password")
+              ? setIsPasswordError(true)
+              : setIsUsernameError(true)
             } else {
                 setJwtToken(data.access_token);
-                // setAlertClassName("d-none");
-                // setAlertMessage("");
                 toggleRefresh(true);
-                navigate("/");
+                handleClose();
+                console.log("submitted succesfully!")
+                handleClose();
             }
         })
         .catch(error => {
           console.log(error);
-            // setAlertClassName("alert-danger");
-            // setAlertMessage(error);
-        })
-      // Clear the form after submission
-      setUsername('');
-      setPassword('');
-      setEmail('');
-      
-      console.log("submitted succesfully!")
-      handleClose();
+        }) 
   };
 
   const handleSignUpRequest = () => {
     console.log("Sign up!");
+    let payload = {
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      username: username,
+      password: password,
+    }
+
+    const requestOptions: RequestInit = {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // credentials: 'include',
+      body: JSON.stringify(payload),
+    };
+
+    fetch(`http://localhost:8080/signup`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.error) {
+              console.log(data.message)
+            } else {
+              console.log("Sign up successfully");
+              setIsSuccessful(true);
+              props.setStatus("login");
+            }
+        })
+        .catch(error => {
+          console.log(error);
+        })
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,10 +132,11 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  id="username"
                   label="Username"
                   name="username"
                   autoFocus
+                  error={isUsernameError}
+                  helperText={isUsernameError ? error: ''}
                   onChange={(e) => setUsername(e.target.value)}
                   value={username}
                 />
@@ -110,7 +148,8 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                   name="password"
                   label="Password"
                   type="password"
-                  id="password"
+                  error={isPasswordError}
+                  helperText={isPasswordError ? error: ''}
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
@@ -141,7 +180,28 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
+                  label="First Name"
+                  name="firstName"
+                  autoFocus
+                  onChange={(e) => setFirstName(e.target.value)}
+                  value={firstName}
+                />
+              <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Last Name"
+                  name="lastName"
+                  autoFocus
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
+                />
+              <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
                   label="Email"
                   name="email"
                   autoFocus
@@ -153,10 +213,11 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  id="username"
                   label="Username"
                   name="username"
                   autoFocus
+                  error={isUsernameError}
+                  helperText={isUsernameError ? error: ''}
                   onChange={(e) => setUsername(e.target.value)}
                   value={username}
                 />
@@ -168,7 +229,8 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                   name="password"
                   label="Password"
                   type="password"
-                  id="password"
+                  error={isPasswordError}
+                  helperText={isPasswordError ? error: ''}
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
@@ -192,6 +254,11 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
               </Button>
             </Typography>
           </Dialog>
+          <Snackbar open={isSuccessful} autoHideDuration={6000} onClose={handleClosePopUp}>
+            <Alert onClose={handleClosePopUp} severity="success">
+              Signup successfully!
+            </Alert>
+          </Snackbar>
         </>
   );
 };

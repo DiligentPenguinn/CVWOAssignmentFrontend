@@ -1,29 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import ScrollTopButton from './components/ScrollTopButton';
-import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
-import { createContext } from 'react';
-import { jwtContext } from './components/Context';
+import { Outlet } from 'react-router-dom';
+import { LoginFormContext, jwtContext } from './components/Context';
 
 const App: React.FC = () => {
   const [jwtToken, setJwtToken] = useState<string>("");
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertClassName, setAlertClassName] = useState<string>("d-none");
-
   const [tickInterval, setTickInterval] = useState<NodeJS.Timeout>();
-
-  const navigate = useNavigate();
+  const [status, setStatus] = useState<string>("");
+  const handleClose = () => {
+    setStatus("");
+  }
 
   const toggleRefresh = useCallback((status : boolean) => {
-    console.log("clicked");
 
     if (status) {
-      console.log("turning on ticking");
       let i = setInterval(() => {
 
-        const requestOptions = {
+        const requestOptions : RequestInit = {
           method: "GET",
-          credentials: "include" as RequestCredentials,
+          credentials: "include",
         }
 
         fetch(`http://localhost:8080/refresh`, requestOptions)
@@ -38,11 +34,7 @@ const App: React.FC = () => {
         })
       }, 600000);
       setTickInterval(i);
-      console.log("setting tick interval to", i);
     } else {
-      console.log("turning off ticking");
-      console.log("turning off tickInterval", tickInterval);
-      // setTickInterval(null);
       clearInterval(tickInterval);
     }
   }, [tickInterval])
@@ -63,18 +55,20 @@ const App: React.FC = () => {
           }
         })
         .catch(error => {
-          console.log("user is not logged in", error);
+          console.log("user is not logged in");
         })
     }
   }, [jwtToken, toggleRefresh])
   
   return (
     <div>
-      <jwtContext.Provider value={{jwtToken, setJwtToken, toggleRefresh}}>
-        <PrimarySearchAppBar/>
-        <ScrollTopButton></ScrollTopButton>
-        <Outlet/>
-      </jwtContext.Provider>
+      <LoginFormContext.Provider value={{status, setStatus, handleClose}}>
+        <jwtContext.Provider value={{jwtToken, setJwtToken, toggleRefresh}}>
+          <PrimarySearchAppBar/>
+          <ScrollTopButton></ScrollTopButton>
+          <Outlet/>
+        </jwtContext.Provider>
+      </LoginFormContext.Provider>
 
     </div>
 

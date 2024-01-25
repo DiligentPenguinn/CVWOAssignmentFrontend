@@ -1,4 +1,4 @@
-export interface ThreadProps {
+export type ThreadProps = {
   id: number;
   user_id: number;
   title: string;

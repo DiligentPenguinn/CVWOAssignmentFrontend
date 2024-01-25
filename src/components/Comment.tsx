@@ -1,37 +1,51 @@
-import React, {MouseEvent, useState} from 'react';
+import React, {MouseEvent, useEffect, useState} from 'react';
 import { Typography, Card, CardContent, Button, Box } from '@mui/material';
 import { CommentProps } from '../models/CommentProps';
 import CommentInput from './CommentInput';
-
-const Comment: React.FC<CommentProps> = ({ body, handleReply }) => {
+import { ReplyProps } from '../models/ReplyProps';
+import Reply from './Reply';
+const Comment: React.FC<CommentProps> = ({ body, id }) => {
+  const [replies, setReplies] = useState<ReplyProps[]>();
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     setIsClicked(!isClicked);
   }
 
-  const handleComment = (event: MouseEvent<HTMLButtonElement>) => {
-    console.log('Sent!');
-    setIsClicked(false);
-  }
+  useEffect(() => {
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    let requestOptions = {
+        method: "GET",
+        headers: headers,
+    }
+
+    fetch(`http://localhost:8080/comment/${id}/replies`, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+        setReplies(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
+  }, [id])
   return (
     <Card style={{ margin: '8px 0', border: 'none'}}>
       <CardContent>
-        {/* <Typography variant="subtitle1" color="textSecondary">
-          {author}
-        </Typography> */}
         <Typography>{body}</Typography>
       </CardContent>
       <Button color='primary' onClick={handleButtonClick} sx={{display: 'flex', justifyContent : 'right'}}>
         Reply
       </Button>
+      <Box sx={{marginLeft: 5}}>
+        {replies && replies.map((reply) => (
+          <Reply {...reply} />
+        ))}
+      </Box>
       {isClicked
        && 
-       <CommentInput handleButtonClick={handleReply ? handleReply : () => console.log('nothing happens')}/>}
-       {/* <Box sx={{marginLeft: 2}}>
-          {replies && replies.map(reply => {
-              return <Comment {... reply} handleReply={handleReply}/>
-          })}
-        </Box> */}
+       <CommentInput type="reply" ID={id}/>}
     </Card>
   );
 };

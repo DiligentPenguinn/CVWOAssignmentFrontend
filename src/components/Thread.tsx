@@ -11,11 +11,6 @@ const Thread: React.FC<ThreadProps> = ({id, title, body, updated_at, tags }) => 
           {title}
         </Typography>
         <Grid container alignItems="center" spacing={1}>
-          {/* <Grid item>
-            <Typography variant="subtitle1" color="textSecondary">
-              Posted by {author}
-            </Typography>
-          </Grid> */}
           <Grid item>
             <Typography variant="caption" color="textSecondary">
               Updated at: {updated_at}
